@@ -26,16 +26,13 @@ The system is designed to automatically detect and respond to both performance i
 
 ### Project Description
 
-In this project, you will take on the role of a **Cloud Support Engineer**.
+In this project, I will take on the role of a **Cloud Support Engineer**.
 
-You will:
-
+I will:
 - Configure monitoring for EC2 instances  
 - Trigger automated responses to performance issues  
 - Detect and investigate security threats  
 - Simulate real-world incidents and respond accordingly  
-
-By the end of this project, you will gain hands-on experience with AWS monitoring tools and incident response workflows—critical skills for cloud and security professionals.
 
 ---
 
@@ -62,7 +59,7 @@ The project is divided into the following key phases:
 
 ### Architecture Diagram
 
-> _Insert architecture diagram here_
+![Project Diagram](images/aws-monitoring-auto-remediation-diagram.gif)
 
 ---
 
