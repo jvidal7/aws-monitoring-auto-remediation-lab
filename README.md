@@ -230,15 +230,50 @@ rm /home/ec2-user/fakefile
 ### Screenshot
 ![Cleanup Command](images/remove-fakefile.png)
 
+### Verifying Available Disk Space
+
+Verified that disk utilization returned to normal after removing the test file.
+
+### Command Used
+
+```bash
+df -h
+```
+
+### Screenshot
+![Disk Space Restored](images/disk-space-restored.png)
+
+The available disk space increased successfully after cleanup, confirming the simulated storage issue was resolved.
+
+---
+
+## Safety Considerations & Summary
+
+The testing tools used throughout this project provide a safe and controlled way to simulate real-world cloud infrastructure issues without causing permanent system damage.
+
+### Key Safety Features
+- CPU stress testing automatically stops after the configured timeout period  
+- Disk space can be restored immediately by removing the test file  
+- No permanent changes were made to the EC2 instances  
+- Simulated incidents were designed to avoid service disruption  
+
+These controlled simulations allowed me to safely verify:
+- CloudWatch monitoring functionality  
+- System performance visibility  
+- Infrastructure troubleshooting procedures  
+- Readiness for automated remediation workflows  
+
 ---
 
 ## Outcome
 
 Successfully configured:
-- Development and production EC2 environments
-- CPU stress testing for monitoring validation
-- Disk usage simulation for alert testing
-- Infrastructure preparation for CloudWatch and automated remediation
+- Development and production EC2 environments  
+- CPU stress testing for monitoring validation  
+- Disk usage simulation for alert testing  
+- Infrastructure preparation for CloudWatch monitoring and automated remediation  
+
+This phase established the foundation for implementing real-time monitoring, alerting, and automated incident response within AWS cloud environments.
 
 ---
 
