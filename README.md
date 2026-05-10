@@ -277,3 +277,134 @@ This phase established the foundation for implementing real-time monitoring, ale
 
 ---
 
+# 3.3 Install CloudWatch Agent for Custom Metrics
+
+## Introduction
+
+In this phase of the project, I installed and configured the Amazon CloudWatch Agent on both EC2 instances to collect additional system metrics beyond the default EC2 monitoring data.
+
+By default, CloudWatch provides limited metrics such as CPU utilization. Installing the CloudWatch Agent allows monitoring of:
+- Memory utilization
+- Disk usage
+- Network performance
+- System-level operational metrics
+
+This provides improved visibility into infrastructure health and performance across both development and production environments.
+
+---
+
+## Installing the CloudWatch Agent
+
+Connected to the `Dev-Server` instance and installed the Amazon CloudWatch Agent package.
+
+### Command Used
+
+```bash
+sudo yum install amazon-cloudwatch-agent -y
+```
+
+### Screenshot
+![CloudWatch Agent Installation](images/install-cloudwatch-agent.png)
+
+---
+
+## Running the CloudWatch Agent Configuration Wizard
+
+Configured the CloudWatch Agent using the interactive configuration wizard.
+
+### Command Used
+
+```bash
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard
+```
+
+### Configuration Summary
+
+| Configuration | Selection |
+|---|---|
+| Operating System | Linux |
+| Environment | EC2 |
+| Agent User | root |
+| StatsD | No |
+| CollectD | No |
+| Host Metrics | Yes |
+| Per-Core CPU Metrics | No |
+| EC2 Dimensions | Yes |
+| Aggregate EC2 Metrics | No |
+| Collection Interval | 60 Seconds |
+| Metrics Configuration | Standard |
+| Log Monitoring | No |
+| X-Ray Tracing | No |
+| Store in Parameter Store | No |
+
+![config wizard](images/cloudwatch-agent-config-wizard.png)
+
+---
+
+## Starting the CloudWatch Agent
+
+After completing the configuration wizard, I started the CloudWatch Agent using the generated configuration file.
+
+### Command Used
+
+```bash
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+-a fetch-config \
+-m ec2 \
+-c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json \
+-s
+```
+
+### Screenshot
+![Starting CloudWatch Agent](images/start-cloudwatch-agent.png)
+
+---
+
+## Verifying Agent Status
+
+Verified the CloudWatch Agent was running successfully on the EC2 instance.
+
+### Command Used
+
+```bash
+sudo systemctl status amazon-cloudwatch-agent
+```
+
+### Screenshot
+![CloudWatch Agent Running](images/cloudwatch-agent-running.png)
+
+Expected output:
+
+```bash
+active (running)
+```
+
+This confirms the CloudWatch Agent is actively collecting and sending metrics to Amazon CloudWatch.
+
+---
+
+## Repeating Configuration for Production Environment
+
+Repeated the CloudWatch Agent installation and configuration process on the `Prod-Server` instance to ensure monitoring coverage across both environments.
+
+Why both environments?
+- Improved infrastructure visibility
+- Consistent monitoring across systems
+- Ability to compare operational behavior between environments
+- Better incident detection and troubleshooting capabilities
+
+### Screenshot
+![Production CloudWatch Agent Setup](images/prod-cloudwatch-agent-setup.png)
+
+---
+
+## Outcome
+
+Successfully configured:
+- CloudWatch Agent installation on EC2 instances  
+- Custom metric collection for system monitoring  
+- Enhanced infrastructure visibility  
+- Monitoring coverage across development and production environments  
+
+This phase established the foundation for advanced CloudWatch alarms, automated remediation workflows, and proactive cloud infrastructure monitoring.
+
