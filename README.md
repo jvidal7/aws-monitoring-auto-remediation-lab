@@ -169,6 +169,7 @@ The CPU stress test successfully generated increased CPU utilization and network
 
 ### Screenshot
 ![High CPU CloudWatch Metrics](images/high-cpu-cloudwatch-metrics.png)
+
 ---
 
 ## Production Environment Setup
