@@ -1,4 +1,4 @@
-# aws-monitoring-auto-remediation-lab
+<img width="1596" height="770" alt="image" src="https://github.com/user-attachments/assets/cd903686-94fe-493e-802d-95fefb1c8457" /># aws-monitoring-auto-remediation-lab
 AWS monitoring and auto-remediation system using CloudWatch, Lambda, and GuardDuty to detect, respond to, and mitigate performance and security issues across cloud environments.
 
 ## 3.1 Project Overview
@@ -640,4 +640,223 @@ Successfully implemented an automated remediation workflow capable of:
 
 This phase demonstrates practical experience with event-driven cloud automation and incident response workflows using AWS serverless technologies.
 
+# 3.5 Introducing and Monitoring System Issues
+
+## Introduction
+
+In this section, controlled infrastructure issues were intentionally generated on both EC2 instances to validate the monitoring, alerting, notification, and automated remediation systems configured throughout the project.
+
+The objective of this testing phase was to verify that:
+
+- CloudWatch alarms correctly detect infrastructure problems  
+- SNS notifications are delivered successfully  
+- Lambda remediation workflows execute automatically  
+- EC2 instances are tagged for issue tracking and visibility  
+- Monitoring and alerting workflows function as expected in real-world scenarios  
+
+This simulated how modern cloud monitoring systems respond to operational failures and performance degradation events.
+
 ---
+
+# Triggering a High CPU Event
+
+## Connecting to the Development Environment
+
+Connected to the `Dev-Server` EC2 instance using SSH.
+
+### Command Used
+
+```bash
+ssh -i "your-key.pem" ec2-user@your-dev-instance-ip
+```
+
+---
+
+## Generating CPU Load
+
+Used the `stress` utility to artificially increase CPU utilization and trigger the CloudWatch CPU alarm.
+
+### Command Used
+
+```bash
+sudo stress --cpu 8 --timeout 300
+```
+
+### Purpose
+
+This command launches 8 CPU-intensive worker processes for 5 minutes, generating enough load to exceed the configured 85% CPU utilization threshold.
+
+### Screenshot
+![CPU Stress Test Running](images/cpu-stress-test-running.png)
+
+---
+
+## Monitoring the Alarm Response
+
+Observed the `DevInstance-HighCPU` CloudWatch alarm and monitored CPU utilization during testing.
+
+### Verification Steps
+1. Opened the AWS CloudWatch Console  
+2. Navigated to **Alarms**  
+3. Located the `DevInstance-HighCPU` alarm  
+4. Monitored CPU utilization against the configured threshold  
+
+### Screenshot
+![High CPU Alarm Monitoring](images/highcpu-alarm-triggered.png)
+
+---
+
+## Verifying SNS Notifications
+
+Confirmed that SNS successfully delivered email notifications after the alarm threshold was exceeded.
+
+### Screenshot
+![SNS CPU Alert Email](images/sns-cpu-alert-email.png)
+
+---
+
+## Verifying Lambda Execution
+
+Validated that the `EC2-AutoRemediation` Lambda function executed successfully after receiving the SNS notification.
+
+### Screenshot
+![Lambda Execution Logs](images/lambda-execution-logs.png)
+
+---
+
+## Verifying Automatic EC2 Tagging
+
+Confirmed that the Lambda function automatically tagged the affected EC2 instance.
+
+| Key | Value |
+|---|---|
+| Issue | HighCPU |
+
+### Screenshot
+![EC2 HighCPU Tag](images/ec2-highcpu-tag.png)
+
+---
+
+# Triggering a Low Disk Space Event
+
+## Connecting to the Production Environment
+
+Connected to the `Prod-Server` EC2 instance using SSH.
+
+### Command Used
+
+```bash
+ssh -i "your-key.pem" ec2-user@your-prod-instance-ip
+```
+
+---
+
+## Consuming Disk Space
+
+Created a large file to intentionally increase disk utilization and trigger the CloudWatch disk usage alarm.
+
+### Command Used
+
+```bash
+fallocate -l 6G /home/ec2-user/fakefile
+```
+
+### Screenshot
+![Disk Usage Test File Created](images/disk-usage-testfile.png)
+
+---
+
+## Monitoring the Disk Alarm Response
+
+Observed the `ProdInstance-LowDisk` CloudWatch alarm transition during testing.
+
+### Verification Steps
+1. Opened the AWS CloudWatch Console  
+2. Navigated to **Alarms**  
+3. Located the `ProdInstance-LowDisk` alarm  
+4. Verified alarm activity and monitoring metrics  
+
+### Screenshot
+![Low Disk Alarm Triggered](images/lowdisk-alarm-triggered.png)
+
+---
+
+## Verifying SNS Notifications
+
+Confirmed that SNS successfully delivered disk utilization alert notifications.
+
+### Screenshot
+![SNS Disk Alert Email](images/sns-disk-alert-email.png)
+
+---
+
+## Verifying Lambda Remediation
+
+Validated that the Lambda remediation function successfully processed the low disk alarm and tagged the affected EC2 instance.
+
+| Key | Value |
+|---|---|
+| Issue | LowDisk |
+
+### Screenshot
+![EC2 LowDisk Tag](images/ec2-lowdisk-tag.png)
+
+---
+
+# Cleaning Up After Testing
+
+## Removing the Test File
+
+Deleted the temporary file created during testing to reclaim disk space and restore normal operating conditions.
+
+### Command Used
+
+```bash
+sudo rm /home/ec2-user/fakefile
+```
+
+### Result
+
+Once the file was removed:
+- Disk utilization returned to normal levels  
+- CloudWatch metrics stabilized  
+- The disk usage alarm gradually returned to the `OK` state  
+
+### Screenshot
+![Disk Space Restored](images/disk-space-restored.png)
+
+---
+
+## Stopping the CPU Stress Test
+
+If the stress test was still running, it was manually stopped using:
+
+```bash
+Ctrl + C
+```
+
+Otherwise, the workload automatically terminated after the configured timeout period.
+
+---
+
+# What Was Learned
+
+By intentionally triggering controlled infrastructure events, the monitoring and remediation pipeline was successfully validated.
+
+## Successfully Verified
+
+- CloudWatch alarms detected abnormal system behavior  
+- SNS notifications were delivered successfully  
+- Lambda remediation workflows executed automatically  
+- EC2 instances were tagged appropriately for issue tracking  
+- Monitoring visibility and operational awareness improved significantly  
+
+## Final Result
+
+This implementation demonstrated a proactive cloud monitoring and incident response workflow capable of:
+- Detecting infrastructure problems in real time  
+- Alerting administrators immediately  
+- Automating remediation workflows  
+- Tracking incidents across EC2 resources  
+
+This project successfully simulated how modern cloud environments use monitoring, alerting, automation, and infrastructure tagging to improve operational resilience and response capabilities.
