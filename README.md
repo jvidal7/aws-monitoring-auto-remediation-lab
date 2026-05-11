@@ -823,7 +823,7 @@ Once the file was removed:
 - The disk usage alarm gradually returned to the `OK` state  
 
 ### Screenshot
-![Disk Space Restored](images/disk-space-restored.png)
+![Disk Space Restored](images/disk-space-restored2.png)
 
 ---
 
