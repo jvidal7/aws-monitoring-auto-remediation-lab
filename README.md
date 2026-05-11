@@ -408,3 +408,236 @@ Successfully configured:
 
 This phase established the foundation for advanced CloudWatch alarms, automated remediation workflows, and proactive cloud infrastructure monitoring.
 
+---
+
+# 3.4 Creating CloudWatch Alarms and SNS Notifications
+
+## Introduction
+
+In this phase of the project, I configured Amazon CloudWatch alarms and Amazon SNS notifications to detect performance issues and automatically send alerts when monitoring thresholds were exceeded.
+
+This allows cloud support teams to respond quickly to infrastructure problems before they impact production systems.
+
+The alarms created in this project monitor:
+- High CPU utilization
+- High disk usage
+- Infrastructure performance anomalies
+
+---
+
+## Creating an SNS Topic
+
+Created an Amazon SNS topic to receive CloudWatch alarm notifications.
+
+### Steps Performed
+1. Navigated to the Amazon SNS Console  
+2. Selected **Topics**  
+3. Clicked **Create topic**  
+4. Selected **Standard Topic**  
+5. Configured the topic name:
+   - `cloudguard-alerts`
+
+### Screenshot
+![SNS Topic Creation](images/sns-topic-creation.png)
+
+---
+
+## Creating an Email Subscription
+
+Configured an email subscription to receive alarm notifications from Amazon SNS.
+
+### Steps Performed
+1. Opened the SNS topic  
+2. Clicked **Create subscription**  
+3. Selected:
+   - Protocol: `Email`
+4. Entered an email endpoint for notifications  
+5. Confirmed the subscription through the AWS confirmation email  
+
+### Screenshot
+![SNS Email Subscription](images/sns-email-subscription.png)
+
+---
+
+## Creating a High CPU Alarm
+
+Created a CloudWatch alarm to monitor CPU utilization on the `Dev-Server` instance.
+
+### Alarm Configuration
+
+| Setting | Value |
+|---|---|
+| Metric | CPUUtilization |
+| Threshold | Greater than 85% |
+| Evaluation Period | 5 Minutes |
+| Statistic | Average |
+| Notification Target | cloudguard-alerts SNS Topic |
+
+### Steps Performed
+1. Opened Amazon CloudWatch  
+2. Navigated to **Alarms**  
+3. Selected **Create Alarm**  
+4. Chose the `CPUUtilization` metric for the EC2 instance  
+5. Configured threshold conditions  
+6. Attached SNS notification actions  
+
+![cpu alarm](images/cloudwatch-cpu-alarm-created.png)
+
+---
+## Creating a Low Disk Space Alarm
+
+Configured a CloudWatch alarm to monitor disk utilization on the `Prod-Server` instance using custom CloudWatch Agent metrics.
+
+### Alarm Configuration
+
+| Setting | Value |
+|---|---|
+| Namespace | CWAgent |
+| Metric | disk_used_percent |
+| Filesystem Path | `/` |
+| Threshold | Greater than or Equal to 80% |
+| Statistic | Average |
+| Period | 1 Minute |
+
+### Purpose
+
+This alarm detects when disk utilization exceeds safe operational thresholds and triggers SNS notifications for rapid response.
+
+---
+
+## Creating the Lambda Function
+
+Created a serverless AWS Lambda function to automatically respond to CloudWatch alarms triggered by infrastructure issues.
+
+### Lambda Configuration
+
+| Setting | Value |
+|---|---|
+| Function Name | EC2-AutoRemediation |
+| Runtime | Python 3.14 |
+| Architecture | x86_64 |
+| Trigger Source | Amazon SNS |
+| Purpose | Automated Incident Response |
+
+### Steps Performed
+1. Opened the AWS Lambda Console  
+2. Selected **Create Function**  
+3. Chose **Author from Scratch**  
+4. Configured runtime and permissions  
+5. Created the Lambda execution role  
+
+### Screenshot
+![Lambda Function Creation](images/lambda-function-created.png)
+
+---
+
+## Configuring Lambda Permissions
+
+Attached IAM permissions required for the Lambda function to interact with EC2 resources and apply remediation tags.
+
+### Permissions Added
+
+| Permission | Purpose |
+|---|---|
+| AmazonEC2ReadOnlyAccess | Read EC2 instance details |
+| ec2:CreateTags | Automatically tag affected instances |
+
+### Inline Policy Created
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "ec2:CreateTags",
+      "Resource": "arn:aws:ec2:*:*:instance/*"
+    }
+  ]
+}
+```
+
+### Screenshot
+![Lambda IAM Permissions](images/lambda-iam-permissions.png)
+
+---
+
+## Deploying the Auto-Remediation Code
+
+Implemented Python-based remediation logic inside the Lambda function to process CloudWatch alarm events.
+
+### What the Function Does
+
+- Receives CloudWatch alarm notifications from SNS  
+- Identifies the affected EC2 instance  
+- Detects the issue type (`HighCPU` or `LowDisk`)  
+- Automatically tags impacted instances  
+- Logs remediation activity for monitoring and auditing  
+
+### Technologies Used
+
+- AWS Lambda  
+- Amazon SNS  
+- Amazon CloudWatch  
+- Python (`boto3`)  
+
+### Sample Lambda Logic
+
+```python
+if "HighCPU" in alarm_name:
+    issue_tag = "HighCPU"
+elif "LowDisk" in alarm_name:
+    issue_tag = "LowDisk"
+
+ec2.create_tags(
+    Resources=[instance_id],
+    Tags=[
+        {
+            'Key': 'Issue',
+            'Value': issue_tag
+        }
+    ]
+)
+```
+
+### Screenshot
+![Lambda Function Code](images/lambda-function-code.png)
+
+---
+
+## Connecting Lambda to Amazon SNS
+
+Integrated Amazon SNS with Lambda so CloudWatch alarms automatically trigger remediation workflows.
+
+### SNS Subscription Configuration
+
+| Setting | Value |
+|---|---|
+| Protocol | AWS Lambda |
+| Endpoint | EC2-AutoRemediation |
+| Notification Source | CloudWatch Alarms |
+
+### Steps Performed
+1. Opened the SNS Console  
+2. Selected the `EC2-Alarms` topic  
+3. Created a new subscription  
+4. Selected **AWS Lambda** as the protocol  
+5. Connected the `EC2-AutoRemediation` function  
+
+### Screenshot
+![SNS Lambda Subscription](images/sns-lambda-subscription.png)
+
+---
+
+## Outcome
+
+Successfully implemented an automated remediation workflow capable of:
+
+- Detecting infrastructure issues in real time  
+- Triggering Lambda functions from CloudWatch alarms  
+- Automatically tagging impacted EC2 instances  
+- Integrating monitoring, alerting, and remediation services  
+
+This phase demonstrates practical experience with event-driven cloud automation and incident response workflows using AWS serverless technologies.
+
+---
