@@ -20,7 +20,6 @@ This project implements a comprehensive monitoring and auto-remediation system u
 
 The system is designed to automatically detect and respond to both performance issues and security threats across development and production environments.
 
-
 ---
 
 ### Project Description
@@ -723,6 +722,25 @@ Validated that the `EC2-AutoRemediation` Lambda function executed successfully a
 ![Lambda Execution Logs](images/lambda-execution-logs.png)
 
 ---
+## Monitoring Lambda Execution
+
+Verified that CloudWatch monitoring metrics populated successfully after executing the `EC2-AutoRemediation` Lambda function.
+
+### Metrics Observed
+- Lambda Invocations
+- Execution Duration
+- Concurrent Executions
+- Success and Error Metrics
+
+### Validation Results
+- Lambda function executed successfully
+- CloudWatch monitoring data populated correctly
+- AWS Lambda metrics were captured in real time
+
+### Screenshot
+![Lambda Monitor Metrics](images/lambda-monitor-metrics.png)
+
+---
 
 ## Verifying Automatic EC2 Tagging
 
@@ -860,3 +878,5 @@ This implementation demonstrated a proactive cloud monitoring and incident respo
 - Tracking incidents across EC2 resources  
 
 This project successfully simulated how modern cloud environments use monitoring, alerting, automation, and infrastructure tagging to improve operational resilience and response capabilities.
+
+---
