@@ -1267,9 +1267,7 @@ The following incident response actions were completed:
 - Conducted remediation validation testing
 - Documented findings and security recommendations
 
----
-
-## Business Impact Assessment
+Business Impact Assessment:
 
 No business impact occurred during this event.
 
@@ -1280,9 +1278,7 @@ The reconnaissance activity was:
 
 No data exposure, service interruption, or unauthorized access was identified.
 
----
-
-## Security Recommendations
+Security Recommendations
 
 To strengthen CloudGuard’s long-term cloud security posture, the following recommendations were identified:
 
@@ -1293,9 +1289,8 @@ To strengthen CloudGuard’s long-term cloud security posture, the following rec
 - Perform recurring cloud security posture assessments
 - Develop standardized incident response runbooks and escalation procedures
 
----
 
-## Conclusion
+Conclusion
 
 This exercise successfully demonstrated the full cloud security incident response lifecycle within AWS, including:
 
