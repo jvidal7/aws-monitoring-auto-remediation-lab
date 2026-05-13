@@ -1033,3 +1033,318 @@ By completing this section, the following security capabilities were successfull
 - CloudGuard gained proactive cloud threat detection visibility
 
 This implementation demonstrates how AWS-native threat detection services can identify suspicious activity and improve cloud security monitoring within AWS environments.
+
+---
+
+# 3.7 Cloud Engineer Incident Response: Handling the GuardDuty Finding
+
+## Introduction
+
+After configuring AWS GuardDuty and generating a simulated reconnaissance attack, the next phase focused on incident response procedures. This section demonstrates how CloudGuard investigated, analyzed, and remediated a detected security event using AWS-native security controls. :contentReference[oaicite:0]{index=0}
+
+---
+
+# Analyzing the GuardDuty Finding
+
+## Reviewing Threat Detection Details
+
+Navigated to:
+
+```text
+GuardDuty → Findings
+```
+
+Located the GuardDuty finding related to the simulated `nmap` reconnaissance scan and reviewed the detailed threat intelligence provided by AWS GuardDuty.
+
+### Findings Reviewed
+
+| Attribute | Details |
+|---|---|
+| Finding Type | `Recon:EC2/PortProbeUnprotectedPort` |
+| Severity | Medium |
+| Source | 100.54.197.113 |
+| Target | 54.81.136.140 |
+| Activity | Port Scanning |
+| Ports Scanned | 1–1000 |
+
+### Screenshot Required
+![GuardDuty PortProbe Finding](images/guardduty-portprobe-finding.png)
+
+![GuardDuty PortProbe Finding](images/guardduty-portprobe-finding2.png)
+
+---
+
+# Investigating the Root Cause
+
+## Reviewing System Logs
+
+Investigated system activity on the Production EC2 instance to identify evidence of reconnaissance behavior and validate the source of the scan. :contentReference[oaicite:1]{index=1}
+
+### Commands Used
+
+```bash
+# Search for nmap-related activity
+sudo journalctl | grep -i "nmap"
+```
+
+### Investigation Results
+
+- Verified the scan originated from the Dev EC2 instance
+- Confirmed the activity was part of controlled security testing
+- Validated no unauthorized exploitation occurred
+
+### Screenshot Required
+![Security Log Investigation](images/security-log-investigation.png)
+
+---
+
+# Reviewing Security Configurations
+
+## Validating Security Group Exposure
+
+Reviewed EC2 Security Group configurations to verify that only authorized network access was permitted within the CloudGuard environment.
+
+### Validation Results
+
+- Confirmed only SSH port `22` was exposed
+- Verified access was restricted to a trusted IP address
+- Confirmed no unnecessary ports were publicly accessible
+- Validated that the reconnaissance scan did not exploit misconfigured Security Group rules
+
+### Screenshot
+![Security Group Review](images/security-group-review.png)
+
+---
+
+# Implementing Remediation Actions
+
+## Creating a Network ACL
+
+Implemented an additional network security layer using a Network Access Control List (NACL) to block suspicious scanning activity between environments. :contentReference[oaicite:3]{index=3}
+
+### NACL Configuration
+
+| Rule # | Type | Action | Source |
+|---|---|---|---|
+| 100 | TCP 1-1000 | DENY | Dev EC2 IP |
+| 200 | ALL Traffic | ALLOW | 0.0.0.0/0 |
+
+### Steps Performed
+
+1. Navigated to:
+   ```text
+   VPC → Network ACLs
+   ```
+
+2. Created:
+   ```text
+   CloudGuard-Prod-Protection-NACL
+   ```
+
+3. Added inbound deny rule for suspicious port scanning activity
+
+4. Associated the NACL with the Production subnet
+
+### Screenshot Required
+
+![NACL Configuration](images/nacl-configuration.png)
+
+---
+
+# Validating the Remediation
+
+## Retesting the Port Scan
+
+After implementing the NACL rule, performed another `nmap` scan against the Production EC2 instance to validate the remediation controls. :contentReference[oaicite:4]{index=4}
+
+### Command Used
+
+```bash
+sudo nmap -p 1-1000 -T4 -A 54.81.136.140
+```
+
+### Validation Results
+
+- Port scanning activity was restricted
+- NACL remediation controls functioned correctly
+- Defense-in-depth protections were successfully implemented
+
+### Screenshot Required
+![Blocked Port Scan](images/blocked-portscan.png)
+
+---
+
+# Creating an Incident Report
+
+## Documenting the Security Event
+
+Created a formal incident report documenting the detection, investigation, remediation, and lessons learned from the GuardDuty finding. :contentReference[oaicite:5]{index=5}
+
+### Incident Summary
+
+| Category | Details |
+|---|---|
+| Incident Type | Port Scanning Activity |
+| Severity | Medium |
+| Detection Source | AWS GuardDuty |
+| Root Cause | Controlled Security Testing |
+| Business Impact | None |
+
+### Key Actions Taken
+
+- Investigated GuardDuty findings
+- Reviewed Production system logs
+- Implemented NACL protections
+- Validated remediation effectiveness
+- Documented incident response actions
+
+
+```md
+
+# Creating an Incident Report
+
+## Documenting the Security Event
+
+A formal security incident report was created to document the GuardDuty finding, investigation process, remediation actions, and security recommendations following the simulated reconnaissance activity between the Development and Production environments.
+
+---
+
+# CloudGuard Security Incident Report
+
+## Incident Overview
+
+| Category | Details |
+|---|---|
+| **Incident ID** | SEC-2025-2025-05-11-001 |
+| **Incident Type** | Internal Reconnaissance / Port Scanning |
+| **Severity** | Medium |
+| **Detection Source** | AWS GuardDuty |
+| **Source Environment** | Development EC2 Instance |
+| **Target Environment** | Production EC2 Instance |
+| **Source IP Address** | `100.54.197.113` |
+| **Target IP Address** | `54.81.136.140` |
+
+---
+
+## Incident Description
+
+AWS GuardDuty detected suspicious reconnaissance activity originating from the Development EC2 instance targeting the Production EC2 environment. The activity matched behavioral patterns commonly associated with attacker reconnaissance techniques and was identified as aggressive port scanning activity using the `nmap` utility.
+
+The security event was intentionally generated as part of controlled CloudGuard security testing to validate GuardDuty threat detection and incident response capabilities.
+
+---
+
+## Timeline of Events
+
+| Time (UTC) | Event |
+|---|---|
+| **23:31** | Initiated `nmap` reconnaissance scan from Development environment |
+| **23:35** | AWS GuardDuty generated a `PortProbe` finding |
+| **23:38** | Investigation confirmed the Development instance as the source |
+| **23:42** | Reviewed EC2 Security Group exposure and access controls |
+| **23:47** | Implemented Network ACL remediation controls |
+| **23:52** | Performed remediation validation testing |
+
+---
+
+## Root Cause Analysis
+
+The incident originated from a controlled security assessment performed without formalized change management procedures or documented authorization workflows for internal security testing activities.
+
+No unauthorized compromise or exploitation occurred during the event.
+
+---
+
+## Investigation and Response Actions
+
+The following incident response actions were completed:
+
+- Verified GuardDuty finding details and severity classification
+- Investigated EC2 system logs for evidence of reconnaissance activity
+- Confirmed execution of the `nmap` scan command from the Development instance
+- Reviewed Security Group configurations for excessive exposure
+- Implemented Network ACL protections between Development and Production environments
+- Conducted remediation validation testing
+- Documented findings and security recommendations
+
+---
+
+## Business Impact Assessment
+
+No business impact occurred during this event.
+
+The reconnaissance activity was:
+- detected successfully,
+- investigated promptly,
+- and remediated before any exploitation attempt could occur.
+
+No data exposure, service interruption, or unauthorized access was identified.
+
+---
+
+## Security Recommendations
+
+To strengthen CloudGuard’s long-term cloud security posture, the following recommendations were identified:
+
+- Implement formal approval and change management procedures for internal security testing
+- Enhance network segmentation between Development and Production environments
+- Create automated remediation workflows using AWS Lambda and EventBridge
+- Configure CloudWatch notifications for future GuardDuty findings
+- Perform recurring cloud security posture assessments
+- Develop standardized incident response runbooks and escalation procedures
+
+---
+
+## Conclusion
+
+This exercise successfully demonstrated the full cloud security incident response lifecycle within AWS, including:
+
+- Threat detection using AWS GuardDuty
+- Security investigation using EC2 system logs
+- Validation of reconnaissance activity
+- Network remediation using NACL controls
+- Security documentation and reporting
+- Defense-in-depth cloud security practices
+
+By completing this exercise, CloudGuard validated its ability to detect, investigate, and respond to suspicious cloud activity using AWS-native security services.
+
+---
+
+```
+
+Recommended Screenshot:
+- Markdown report
+OR
+- Notes/documentation summary
+
+---
+
+# Implementing Preventive Measures
+
+## Strengthening Cloud Security Posture
+
+Outlined additional security improvements to enhance CloudGuard’s long-term cloud security maturity. :contentReference[oaicite:6]{index=6}
+
+### Security Enhancements
+
+- Automate GuardDuty remediation with EventBridge and Lambda
+- Implement AWS Config security auditing
+- Strengthen Dev/Prod network segmentation
+- Establish formal security testing procedures
+- Integrate AWS Security Hub
+- Create standardized incident response runbooks
+
+---
+
+# Key Takeaways
+
+This exercise demonstrated the complete AWS cloud incident response lifecycle:
+
+- Threat detection using AWS GuardDuty
+- Security investigation using system logs
+- Network remediation using NACLs
+- Validation of defensive controls
+- Security documentation and reporting
+- Defense-in-depth cloud security architecture
+
+By implementing these procedures, CloudGuard strengthened its operational security capabilities and demonstrated proactive cloud threat response practices. :contentReference[oaicite:7]{index=7}
