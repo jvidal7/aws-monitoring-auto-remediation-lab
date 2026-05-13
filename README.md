@@ -1174,9 +1174,8 @@ sudo nmap -p 1-1000 -T4 -A 54.81.136.140
 
 ---
 
-```md
 # Creating an Incident Report
-
+```md
 ## Documenting the Security Event
 
 Created a formal incident report documenting the detection, investigation, remediation, and lessons learned from the GuardDuty finding.
