@@ -906,7 +906,7 @@ Reviewed the required IAM service permissions used by GuardDuty to monitor:
 
 Enabled GuardDuty for the `us-east-1` region.
 
-### Screenshot Required
+### Screenshot 
 ```md
 ![GuardDuty Enabled](images/guardduty-enabled.png)
 ```
@@ -932,33 +932,6 @@ These permissions included:
 ![GuardDuty IAM Permissions](images/guardduty-iam-permissions.png)
 ```
 
-Recommended Screenshot:
-- The IAM permissions JSON/policy shown in your screenshot
-
----
-
-# Preparing the Development Environment
-
-## Rebooting the Dev EC2 Instance
-
-Rebooted the Dev EC2 instance to ensure a clean testing environment.
-
-### Command Used
-
-```bash
-sudo reboot
-```
-
-### Screenshot Required
-```md
-![Dev Instance Reboot](images/dev-instance-reboot.png)
-```
-
-Recommended Screenshot:
-- EC2 instance state changing/rebooting
-OR
-- SSH reconnect after reboot
-
 ---
 
 # Configuring AWS CLI Credentials
@@ -977,14 +950,10 @@ Provided:
 
 > **Security Note:** IAM roles should be used in production environments instead of long-term access keys whenever possible.
 
-### Screenshot Required
+### Screenshot 
 ```md
 ![AWS Configure](images/aws-configure.png)
 ```
-
-Recommended Screenshot:
-- Terminal showing successful `aws configure` execution
-- Do NOT expose secret keys
 
 ---
 
@@ -998,13 +967,10 @@ Installed the `nmap` network scanning utility on both EC2 instances.
 sudo yum install nmap -y
 ```
 
-### Screenshot Required
+### Screenshot 
 ```md
 ![Nmap Installed](images/nmap-installed.png)
 ```
-
-Recommended Screenshot:
-- Terminal showing successful package installation
 
 ---
 
@@ -1029,13 +995,10 @@ sudo nmap -Pn -p 1-1000 -T4 -A [TARGET-EC2-IP]
 | `-T4` | Aggressive timing template |
 | `-A` | Enable OS detection and advanced scanning |
 
-### Screenshot Required
+### Screenshot 
 ```md
 ![Nmap Port Scan](images/nmap-portscan.png)
 ```
-
-Recommended Screenshot:
-- Terminal showing active nmap scan results
 
 ---
 
@@ -1063,22 +1026,16 @@ The findings included:
 - Source IP information
 - Remediation recommendations
 
-### Screenshot Required
+### Screenshot
 ```md
 ![GuardDuty Findings](images/guardduty-findings.png)
 ```
 
-Recommended Screenshot:
-- GuardDuty findings dashboard
-- PortProbe finding visible
-- Severity and affected resource details visible
-
 ---
 
-# What We Learned
+# What I've Learned
 
 By completing this section, the following security capabilities were successfully validated:
-
 - AWS GuardDuty was enabled successfully
 - Continuous threat monitoring was activated
 - Simulated reconnaissance activity was detected
