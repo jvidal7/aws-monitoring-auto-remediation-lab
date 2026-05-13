@@ -1174,11 +1174,12 @@ sudo nmap -p 1-1000 -T4 -A 54.81.136.140
 
 ---
 
+```md
 # Creating an Incident Report
 
 ## Documenting the Security Event
 
-Created a formal incident report documenting the detection, investigation, remediation, and lessons learned from the GuardDuty finding. :contentReference[oaicite:5]{index=5}
+Created a formal incident report documenting the detection, investigation, remediation, and lessons learned from the GuardDuty finding.
 
 ### Incident Summary
 
@@ -1197,8 +1198,6 @@ Created a formal incident report documenting the detection, investigation, remed
 - Implemented NACL protections
 - Validated remediation effectiveness
 - Documented incident response actions
-
-# Creating an Incident Report
 
 ## Documenting the Security Event
 
@@ -1300,13 +1299,7 @@ This exercise successfully demonstrated the full cloud security incident respons
 
 By completing this exercise, CloudGuard validated its ability to detect, investigate, and respond to suspicious cloud activity using AWS-native security services.
 
----
-
-Recommended Screenshot:
-- Markdown report
-OR
-- Notes/documentation summary
-
+```
 ---
 
 # Implementing Preventive Measures
@@ -1337,4 +1330,4 @@ This exercise demonstrated the complete AWS cloud incident response lifecycle:
 - Security documentation and reporting
 - Defense-in-depth cloud security architecture
 
-By implementing these procedures, CloudGuard strengthened its operational security capabilities and demonstrated proactive cloud threat response practices. :contentReference[oaicite:7]{index=7}
+By implementing these procedures, CloudGuard strengthened its operational security capabilities and demonstrated proactive cloud threat response practices. 
