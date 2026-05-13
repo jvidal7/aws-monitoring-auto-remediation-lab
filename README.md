@@ -907,9 +907,7 @@ Reviewed the required IAM service permissions used by GuardDuty to monitor:
 Enabled GuardDuty for the `us-east-1` region.
 
 ### Screenshot 
-```md
 ![GuardDuty Enabled](images/guardduty-enabled.png)
-```
 
 Recommended Screenshot:
 - GuardDuty dashboard after enabling the service
@@ -928,9 +926,7 @@ These permissions included:
 - VPC monitoring permissions
 
 ### Screenshot Required
-```md
 ![GuardDuty IAM Permissions](images/guardduty-iam-permissions.png)
-```
 
 ---
 
@@ -951,9 +947,8 @@ Provided:
 > **Security Note:** IAM roles should be used in production environments instead of long-term access keys whenever possible.
 
 ### Screenshot 
-```md
 ![AWS Configure](images/aws-configure.png)
-```
+
 
 ---
 
@@ -968,9 +963,8 @@ sudo yum install nmap -y
 ```
 
 ### Screenshot 
-```md
 ![Nmap Installed](images/nmap-installed.png)
-```
+
 
 ---
 
@@ -996,9 +990,7 @@ sudo nmap -Pn -p 1-1000 -T4 -A [TARGET-EC2-IP]
 | `-A` | Enable OS detection and advanced scanning |
 
 ### Screenshot 
-```md
 ![Nmap Port Scan](images/nmap-portscan.png)
-```
 
 ---
 
@@ -1027,9 +1019,7 @@ The findings included:
 - Remediation recommendations
 
 ### Screenshot
-```md
 ![GuardDuty Findings](images/guardduty-findings.png)
-```
 
 ---
 
