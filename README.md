@@ -1198,9 +1198,6 @@ Created a formal incident report documenting the detection, investigation, remed
 - Validated remediation effectiveness
 - Documented incident response actions
 
-
-```md
-
 # Creating an Incident Report
 
 ## Documenting the Security Event
@@ -1304,8 +1301,6 @@ This exercise successfully demonstrated the full cloud security incident respons
 By completing this exercise, CloudGuard validated its ability to detect, investigate, and respond to suspicious cloud activity using AWS-native security services.
 
 ---
-
-```
 
 Recommended Screenshot:
 - Markdown report
